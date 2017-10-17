@@ -14,7 +14,7 @@
 
 import Foundation
 
-print("Hello, World!1234")
+print("Austin Brovick")
 
 public func testMe() -> String {
   return "I have been tested"
@@ -91,64 +91,114 @@ public struct Money {
 //print(tenUSD.subtract(yolo).amount)
 
 
-//
+
 //////////////////////////////////////
-//// Job
-////
-//open class Job {
-//  fileprivate var title : String
-//  fileprivate var type : JobType
+// Job
 //
-//  public enum JobType {
-//    case Hourly(Double)
-//    case Salary(Int)
-//  }
+open class Job {
+    fileprivate var title : String
+    fileprivate var type : JobType
+
+    public enum JobType {
+        case Hourly(Double)
+        case Salary(Int)
+    }
+
+    public init(title : String, type : JobType) {
+        self.title = title
+        self.type = type
+    }
+
+    open func calculateIncome(_ hours: Int) -> Int {
+        switch self.type {
+        case .Hourly(let hourly):
+            return Int(hourly) * hours
+        case .Salary(let salary):
+            return Int(salary)
+        }
+    }
+
+    open func raise(_ amt : Double) {
+        switch self.type {
+        case.Hourly(let hourly):
+            self.type = Job.JobType.Hourly(hourly + amt)
+        case .Salary(let salary):
+            self.type = Job.JobType.Salary(salary + Int(amt))
+        }
+    }
+}
+
+
+//let job = Job(title: "Guest Lecturer", type: Job.JobType.Salary(1000))
+//let job = Job(title: "Janitor", type: Job.JobType.Hourly(15.0))
+//print(job.calculateIncome(44))
+//print(job.type)
+
+
+//let job = Job(title: "Janitor", type: Job.JobType.Hourly(15.0))
+//print(job.calculateIncome(10))
+//job.raise(1.0)
+//print(job.calculateIncome(10))
+
+//let job = Job(title: "Guest Lecturer", type: Job.JobType.Salary(1000))
 //
-//  public init(title : String, type : JobType) {
-//  }
-//
-//  open func calculateIncome(_ hours: Int) -> Int {
-//  }
-//
-//  open func raise(_ amt : Double) {
-//  }
-//}
+//job.raise(1000)
+//print(job.calculateIncome(50))
+
 //
 //////////////////////////////////////
 //// Person
 ////
-//open class Person {
-//  open var firstName : String = ""
-//  open var lastName : String = ""
-//  open var age : Int = 0
+
+open class Person {
+  open var firstName : String = ""
+  open var lastName : String = ""
+  open var age : Int = 0
+
+  fileprivate var _job : Job? = nil
+    
+  open var job : Job? {
+    get { return self._job }
+    set(value) {
+        if self.age > 15 {
+            self._job = value
+        }
+    }
+  }
+
+  fileprivate var _spouse : Person? = nil
+    
+    open var spouse : Person? {
+        get { return self._spouse }
+        set(value) {
+            if self.age > 15 {
+                self._spouse = value
+            }
+        }
+    }
+
+    public init(firstName : String, lastName: String, age : Int) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.age = age
+    }
+    open func toString() -> String {
+//        "[Person: firstName:Ted lastName:Neward age:45 job:nil spouse:nil]"
+        return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:\(self._job) spouse:\(self._spouse)]"
+
+    }
+}
+
+
+
+
+
+
+
+
+////////////////////////////////////
+// Family
 //
-//  fileprivate var _job : Job? = nil
-//  open var job : Job? {
-//    get { }
-//    set(value) {
-//    }
-//  }
-//
-//  fileprivate var _spouse : Person? = nil
-//  open var spouse : Person? {
-//    get { }
-//    set(value) {
-//    }
-//  }
-//
-//  public init(firstName : String, lastName: String, age : Int) {
-//    self.firstName = firstName
-//    self.lastName = lastName
-//    self.age = age
-//  }
-//
-//  open func toString() -> String {
-//  }
-//}
-//
-//////////////////////////////////////
-//// Family
-////
 //open class Family {
 //  fileprivate var members : [Person] = []
 //
