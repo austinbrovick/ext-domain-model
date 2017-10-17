@@ -49,13 +49,14 @@ public struct Money {
     }
     
     private func convertHelper(_ from: String, _ to: String) -> Int {
-        return Int(self.amount * Int(self.conversions[from]![to]!))
+        return Int(round(Double(self.amount) * self.conversions[from]![to]!))
     }
     
     public func add(_ to: Money) -> Money {
         if (to.currency != self.currency) {
-            let newAmount = to.convert(self.currency).amount
-            return Money(amount: to.amount + newAmount, currency: self.currency)
+//            let newAmount = to.convert(self.currency).amount
+            let newAmount = self.convert(to.currency).amount
+            return Money(amount: newAmount + to.amount, currency: to.currency)
         }
         return Money(amount: to.amount + self.amount, currency: to.currency)
     }
@@ -72,25 +73,17 @@ public struct Money {
 
 
 
-//let oneUSD = Money(amount: 1, currency: "USD")
-////print(oneUSD.amount)
-//let tenGBP = Money(amount: 10, currency: "GBP")
-////print(tenGBP.convert("USD").amount)
-//
-//let tenUSD = Money(amount: 10, currency: "USD")
-//let yolo = Money(amount: 20, currency: "GBP")
-//
-//
-//print(yolo.amount)
-//
-//print(tenUSD.amount)
-//print(yolo.convert("USD").amount)
-//
-//
-//
-//print(tenUSD.subtract(yolo).amount)
+let tenUSD = Money(amount: 10, currency: "USD")
+let twelveUSD = Money(amount: 12, currency: "USD")
+let fiveGBP = Money(amount: 5, currency: "GBP")
+let fifteenEUR = Money(amount: 15, currency: "EUR")
+let fifteenCAN = Money(amount: 15, currency: "CAN")
 
 
+let total = tenUSD.add(fiveGBP)
+print(total.amount)
+print(total.amount == 10)
+print(total.currency == "GBP")
 
 //////////////////////////////////////
 // Job
@@ -120,7 +113,7 @@ open class Job {
 
     open func raise(_ amt : Double) {
         switch self.type {
-        case.Hourly(let hourly):
+        case .Hourly(let hourly):
             self.type = Job.JobType.Hourly(hourly + amt)
         case .Salary(let salary):
             self.type = Job.JobType.Salary(salary + Int(amt))
@@ -129,21 +122,6 @@ open class Job {
 }
 
 
-//let job = Job(title: "Guest Lecturer", type: Job.JobType.Salary(1000))
-//let job = Job(title: "Janitor", type: Job.JobType.Hourly(15.0))
-//print(job.calculateIncome(44))
-//print(job.type)
-
-
-//let job = Job(title: "Janitor", type: Job.JobType.Hourly(15.0))
-//print(job.calculateIncome(10))
-//job.raise(1.0)
-//print(job.calculateIncome(10))
-
-//let job = Job(title: "Guest Lecturer", type: Job.JobType.Salary(1000))
-//
-//job.raise(1000)
-//print(job.calculateIncome(50))
 
 //
 //////////////////////////////////////
@@ -183,9 +161,7 @@ open class Person {
         self.age = age
     }
     open func toString() -> String {
-//        "[Person: firstName:Ted lastName:Neward age:45 job:nil spouse:nil]"
         return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:\(self._job) spouse:\(self._spouse)]"
-
     }
 }
 
@@ -193,24 +169,39 @@ open class Person {
 
 
 
-
-
-
 ////////////////////////////////////
 // Family
-//
-//open class Family {
-//  fileprivate var members : [Person] = []
-//
-//  public init(spouse1: Person, spouse2: Person) {
-//  }
-//
-//  open func haveChild(_ child: Person) -> Bool {
-//  }
-//
-//  open func householdIncome() -> Int {
-//  }
-//}
+
+open class Family {
+  fileprivate var members : [Person] = []
+
+    public init(spouse1: Person, spouse2: Person) {
+        members.append(spouse1)
+        members.append(spouse2)
+    }
+
+    open func haveChild(_ child: Person) -> Bool {
+        members.append(child)
+        return true
+        
+    }
+
+    open func householdIncome() -> Int {
+        var income = 0
+        for x in members {
+            if x._job != nil {
+                switch x._job!.type {
+                case .Salary(let salary):
+                    income += salary
+                case .Hourly(let hourly):
+                    income += Int(hourly * 2000.0)
+                }
+            }
+        }
+        return income
+    }
+}
+
 
 
 
