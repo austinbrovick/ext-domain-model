@@ -26,10 +26,16 @@ open class TestMe {
   }
 }
 
+
+
+protocol CustomStringConvertible {
+    var description: String { get }
+}
+
 ////////////////////////////////////
 // Money
 //
-public struct Money {
+public struct Money: CustomStringConvertible {
     public var amount : Int
     public var currency : String
     public let conversions: [String: [String: Double]] = [
@@ -38,6 +44,12 @@ public struct Money {
         "CAN": ["USD": 0.8, "GBP": 0.4, "EUR": 1.2],
         "GBP": ["USD": 2.0, "EUR": 3.0, "CAN": 2.5]
     ]
+    
+    var description: String {
+        get {
+            return currency + String(amount)
+        }
+    }
     
     init(amount: Int, currency: String) {
         self.amount = amount
@@ -54,7 +66,6 @@ public struct Money {
     
     public func add(_ to: Money) -> Money {
         if (to.currency != self.currency) {
-//            let newAmount = to.convert(self.currency).amount
             let newAmount = self.convert(to.currency).amount
             return Money(amount: newAmount + to.amount, currency: to.currency)
         }
@@ -73,22 +84,17 @@ public struct Money {
 
 
 
-let tenUSD = Money(amount: 10, currency: "USD")
-let twelveUSD = Money(amount: 12, currency: "USD")
-let fiveGBP = Money(amount: 5, currency: "GBP")
-let fifteenEUR = Money(amount: 15, currency: "EUR")
-let fifteenCAN = Money(amount: 15, currency: "CAN")
-
-
-let total = tenUSD.add(fiveGBP)
-print(total.amount)
-print(total.amount == 10)
-print(total.currency == "GBP")
 
 //////////////////////////////////////
 // Job
 //
-open class Job {
+open class Job:CustomStringConvertible {
+    var description: String {
+        get {
+            return "\(title) is the job"
+        }
+    }
+    
     fileprivate var title : String
     fileprivate var type : JobType
 
@@ -128,10 +134,16 @@ open class Job {
 //// Person
 ////
 
-open class Person {
+open class Person: CustomStringConvertible {
   open var firstName : String = ""
   open var lastName : String = ""
   open var age : Int = 0
+    
+    var description: String {
+        get {
+            return "\(firstName) \(lastName) is \(age) years old"
+        }
+    }
 
   fileprivate var _job : Job? = nil
     
@@ -172,9 +184,18 @@ open class Person {
 ////////////////////////////////////
 // Family
 
-open class Family {
+open class Family: CustomStringConvertible {
   fileprivate var members : [Person] = []
-
+    
+    var description: String {
+        get {
+            if (members.count > 1) {
+                return "\(members[0]) and \(members[1]) are family"
+            }
+            return "\(members[0]) has no family"
+        }
+    }
+    
     public init(spouse1: Person, spouse2: Person) {
         members.append(spouse1)
         members.append(spouse2)

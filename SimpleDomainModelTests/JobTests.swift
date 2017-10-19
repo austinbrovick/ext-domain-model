@@ -38,4 +38,9 @@ class JobTests: XCTestCase {
     XCTAssert(job.calculateIncome(10) == 160)
   }
   
+    func testDescription() {
+        let job = Job(title: "Janitor", type: Job.JobType.Hourly(15.0))
+        XCTAssert(job.description == "Janitor is the job")
+    }
+    
 }
