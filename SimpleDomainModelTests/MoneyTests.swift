@@ -97,5 +97,10 @@ class MoneyTests: XCTestCase {
         let oneUSD = Money(amount: 1, currency: "USD")
         XCTAssert(oneUSD.amount == "USD1")
     }
+    
+    func testExtension() {
+        var x = 10.0
+        XCTAssert(x.USD.description == "USD10")
+    }
 }
 

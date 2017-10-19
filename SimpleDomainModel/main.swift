@@ -32,10 +32,15 @@ protocol CustomStringConvertible {
     var description: String { get }
 }
 
+protocol Mathematics {
+    func add(_ : Money) -> Money
+    func subtract(_ : Money) -> Money
+}
+
 ////////////////////////////////////
 // Money
 //
-public struct Money: CustomStringConvertible {
+public struct Money: CustomStringConvertible, Mathematics {
     public var amount : Int
     public var currency : String
     public let conversions: [String: [String: Double]] = [
@@ -224,7 +229,31 @@ open class Family: CustomStringConvertible {
 }
 
 
+extension Double {
+    var USD: Money {
+        return Money(amount: Int(self), currency: "USD")
+    }
+    
+    var EUR: Money {
+        return Money(amount: Int(self), currency: "EUR")
+    }
 
+    
+    var GBP: Money {
+        return Money(amount: Int(self), currency: "GBP")
+    }
+
+    
+    var CAN: Money {
+        return Money(amount: Int(self), currency: "CAN")
+    }
+
+    
+    var YEN: Money {
+        return Money(amount: Int(self), currency: "YEN")
+    }
+
+}
 
 
 
