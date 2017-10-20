@@ -178,7 +178,16 @@ open class Person: CustomStringConvertible {
         self.age = age
     }
     open func toString() -> String {
-        return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:\(self._job) spouse:\(self._spouse)]"
+        if (self._spouse != nil && self._job != nil) {
+            return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:\(self._job!.title) spouse:\(self._spouse!.firstName)]"
+        }
+        if (self._spouse != nil) {
+            return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:nil spouse:\(self._spouse!.firstName)]"
+        }
+        if (self._job != nil) {
+            return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:\(self._job!.title) spouse:nil]"
+        }
+        return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:nil spouse:nil]"
     }
 }
 

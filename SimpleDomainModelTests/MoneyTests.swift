@@ -95,11 +95,11 @@ class MoneyTests: XCTestCase {
     
     func testDescription() {
         let oneUSD = Money(amount: 1, currency: "USD")
-        XCTAssert(oneUSD.amount == "USD1")
+        XCTAssert(oneUSD.description == "USD1")
     }
     
     func testExtension() {
-        var x = 10.0
+        let x = 10.0
         XCTAssert(x.USD.description == "USD10")
     }
 }
